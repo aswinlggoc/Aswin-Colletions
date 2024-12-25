@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+h2 {
+    color: #444;
+}
+
+button {
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+button:focus {
+    outline: none;
+}
+
+#form-container {
+    margin-top: 20px;
+}
+
+#coin-collection, #currency-collection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+div {
+    margin: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    width: 200px;
+    text-align: left;
+}
+
+img {
+    margin-top: 10px;
+    border-radius: 5px;
+}

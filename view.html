@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>View Collection</h1>
+
+    <h2>Coins</h2>
+    <div id="coin-collection"></div>
+
+    <h2>Currency Notes</h2>
+    <div id="currency-collection"></div>
+
+    <script>
+        window.onload = function () {
+            const coins = JSON.parse(localStorage.getItem('coins') || '[]');
+            const currencies = JSON.parse(localStorage.getItem('currencies') || '[]');
+
+            const coinCollection = document.getElementById('coin-collection');
+            const currencyCollection = document.getElementById('currency-collection');
+
+            coins.forEach(coin => {
+                coinCollection.innerHTML += `
+                    <div>
+                        <h3>${coin.name}</h3>
+                        <p>Value: ₹${coin.value}</p>
+                        <p>Year: ${coin.year}</p>
+                        <p>Country: ${coin.country}</p>
+                        <img src="${coin.photo}" alt="${coin.name}" width="100"><br>
+                        <p>Description: ${coin.description || 'No description available'}</p>
+                    </div>
+                `;
+            });
+
+            currencies.forEach(currency => {
+                currencyCollection.innerHTML += `
+                    <div>
+                        <h3>${currency.name}</h3>
+                        <p>Value: ₹${currency.value}</p>
+                        <p>Year: ${currency.year}</p>
+                        <p>Country: ${currency.country}</p>
+                        <img src="${currency.photo}" alt="${currency.name}" width="100"><br>
+                        <p>Description: ${currency.description || 'No description available'}</p>
+                    </div>
+                `;
+            });
+        };
+    </script>
+</body>
+</html>
