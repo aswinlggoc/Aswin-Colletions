@@ -4,15 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>View Collection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      margin-top: 50px;
+    }
+    h2 {
+      color: #333;
+    }
+    .collection-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    .item {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      text-align: center;
+    }
+    .item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
   <h1>Your Collection</h1>
-  
+
   <h2>Coins</h2>
-  <div id="coin-collection"></div>
+  <div id="coin-collection" class="collection-container"></div>
 
   <h2>Currency Notes</h2>
-  <div id="currency-collection"></div>
+  <div id="currency-collection" class="collection-container"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
@@ -38,12 +75,12 @@
       coinQuerySnapshot.forEach(doc => {
         const coin = doc.data();
         coinCollection.innerHTML += `
-          <div>
+          <div class="item">
             <h3>${coin.name}</h3>
             <p>Value: ₹${coin.value}</p>
             <p>Year: ${coin.year}</p>
             <p>Country: ${coin.country}</p>
-            <img src="${coin.photo}" alt="${coin.name}" width="100"><br>
+            <img src="${coin.photo}" alt="${coin.name}"><br>
             <p>Description: ${coin.description || 'No description available'}</p>
           </div>
         `;
@@ -54,12 +91,12 @@
       currencyQuerySnapshot.forEach(doc => {
         const currency = doc.data();
         currencyCollection.innerHTML += `
-          <div>
+          <div class="item">
             <h3>${currency.name}</h3>
             <p>Value: ₹${currency.value}</p>
             <p>Year: ${currency.year}</p>
             <p>Country: ${currency.country}</p>
-            <img src="${currency.photo}" alt="${currency.name}" width="100"><br>
+            <img src="${currency.photo}" alt="${currency.name}"><br>
             <p>Description: ${currency.description || 'No description available'}</p>
           </div>
         `;
