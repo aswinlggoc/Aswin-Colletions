@@ -1,89 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Coin / Currency</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Coin or Currency</title>
 </head>
 <body>
-    <h1>Add Coin or Currency</h1>
+  <h1>Add Coin or Currency</h1>
+  <button onclick="showCoinForm()">Coins</button>
+  <button onclick="showCurrencyForm()">Currency Notes</button>
 
-    <div class="button-container">
-        <button onclick="showCoinForm()">Coin</button>
-        <button onclick="showCurrencyForm()">Currency Note</button>
-    </div>
+  <div id="coin-form" style="display: none;">
+    <h2>Add Coin</h2>
+    <label>Coin Name: </label><input type="text" id="coin-name"><br>
+    <label>Value: </label><input type="text" id="coin-value"><br>
+    <label>Year: </label><input type="text" id="coin-year"><br>
+    <label>Country: </label><input type="text" id="coin-country"><br>
+    <label>Photo Link: </label><input type="text" id="coin-photo" required><br>
+    <label>Description: </label><input type="text" id="coin-description"><br>
+    <button onclick="saveCoinData()">Save Coin</button>
+  </div>
 
-    <div id="form-container"></div>
+  <div id="currency-form" style="display: none;">
+    <h2>Add Currency</h2>
+    <label>Currency Name: </label><input type="text" id="currency-name"><br>
+    <label>Value: </label><input type="text" id="currency-value"><br>
+    <label>Year: </label><input type="text" id="currency-year"><br>
+    <label>Country: </label><input type="text" id="currency-country"><br>
+    <label>Photo Link: </label><input type="text" id="currency-photo" required><br>
+    <label>Description: </label><input type="text" id="currency-description"><br>
+    <button onclick="saveCurrencyData()">Save Currency</button>
+  </div>
 
-    <script>
-        function showCoinForm() {
-            document.getElementById("form-container").innerHTML = `
-                <h2>Enter Coin Details</h2>
-                <form id="coin-form">
-                    <label>Name:</label><input type="text" id="coin-name" required><br>
-                    <label>Value:</label><input type="text" id="coin-value" required><br>
-                    <label>Year:</label><input type="number" id="coin-year" required><br>
-                    <label>Country:</label><input type="text" id="coin-country" required><br>
-                    <label>Photo URL:</label><input type="text" id="coin-photo" required><br>
-                    <label>Description (Optional):</label><textarea id="coin-description"></textarea><br>
-                    <button type="submit">Save Coin</button>
-                </form>
-            `;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-            document.getElementById("coin-form").onsubmit = function (event) {
-                event.preventDefault();
-                const coin = {
-                    name: document.getElementById('coin-name').value,
-                    value: document.getElementById('coin-value').value,
-                    year: document.getElementById('coin-year').value,
-                    country: document.getElementById('coin-country').value,
-                    photo: document.getElementById('coin-photo').value,
-                    description: document.getElementById('coin-description').value
-                };
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBP__TQ3__mgwobKSabML3mXo-5uNlXR5g",
+      authDomain: "aswin-collections.firebaseapp.com",
+      projectId: "aswin-collections",
+      storageBucket: "aswin-collections.firebasestorage.app",
+      messagingSenderId: "820050471076",
+      appId: "1:820050471076:web:9469687edf705514a59e31"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-                let coins = JSON.parse(localStorage.getItem('coins') || '[]');
-                coins.push(coin);
-                localStorage.setItem('coins', JSON.stringify(coins));
+    function showCoinForm() {
+      document.getElementById('coin-form').style.display = 'block';
+      document.getElementById('currency-form').style.display = 'none';
+    }
 
-                alert("Coin added!");
-                window.location.href = 'view.html';
-            };
-        }
+    function showCurrencyForm() {
+      document.getElementById('currency-form').style.display = 'block';
+      document.getElementById('coin-form').style.display = 'none';
+    }
 
-        function showCurrencyForm() {
-            document.getElementById("form-container").innerHTML = `
-                <h2>Enter Currency Note Details</h2>
-                <form id="currency-form">
-                    <label>Name:</label><input type="text" id="currency-name" required><br>
-                    <label>Value:</label><input type="text" id="currency-value" required><br>
-                    <label>Year:</label><input type="number" id="currency-year" required><br>
-                    <label>Country:</label><input type="text" id="currency-country" required><br>
-                    <label>Photo URL:</label><input type="text" id="currency-photo" required><br>
-                    <label>Description (Optional):</label><textarea id="currency-description"></textarea><br>
-                    <button type="submit">Save Currency</button>
-                </form>
-            `;
+    // Save Coin Data to Firestore
+    async function saveCoinData() {
+      const coin = {
+        name: document.getElementById('coin-name').value,
+        value: document.getElementById('coin-value').value,
+        year: document.getElementById('coin-year').value,
+        country: document.getElementById('coin-country').value,
+        photo: document.getElementById('coin-photo').value,
+        description: document.getElementById('coin-description').value || ''
+      };
 
-            document.getElementById("currency-form").onsubmit = function (event) {
-                event.preventDefault();
-                const currency = {
-                    name: document.getElementById('currency-name').value,
-                    value: document.getElementById('currency-value').value,
-                    year: document.getElementById('currency-year').value,
-                    country: document.getElementById('currency-country').value,
-                    photo: document.getElementById('currency-photo').value,
-                    description: document.getElementById('currency-description').value
-                };
+      try {
+        await addDoc(collection(db, "coins"), coin);
+        alert("Coin added successfully!");
+        window.location.href = 'view.html';
+      } catch (e) {
+        console.error("Error adding coin: ", e);
+      }
+    }
 
-                let currencies = JSON.parse(localStorage.getItem('currencies') || '[]');
-                currencies.push(currency);
-                localStorage.setItem('currencies', JSON.stringify(currencies));
+    // Save Currency Data to Firestore
+    async function saveCurrencyData() {
+      const currency = {
+        name: document.getElementById('currency-name').value,
+        value: document.getElementById('currency-value').value,
+        year: document.getElementById('currency-year').value,
+        country: document.getElementById('currency-country').value,
+        photo: document.getElementById('currency-photo').value,
+        description: document.getElementById('currency-description').value || ''
+      };
 
-                alert("Currency added!");
-                window.location.href = 'view.html';
-            };
-        }
-    </script>
+      try {
+        await addDoc(collection(db, "currencies"), currency);
+        alert("Currency added successfully!");
+        window.location.href = 'view.html';
+      } catch (e) {
+        console.error("Error adding currency: ", e);
+      }
+    }
+  </script>
 </body>
 </html>
