@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coin Collection</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collection Inventory</title>
 </head>
 <body>
-    <h1>Coin Collection Inventory</h1>
+  <h1>Welcome to the Collection Inventory</h1>
+  <button onclick="window.location.href='add.html'">Add</button>
+  <button onclick="window.location.href='view.html'">View</button>
 
-    <div class="button-container">
-        <a href="add.html"><button> Add Coin / Currency</button></a>
-        <a href="view.html"><button> View Collection</button></a>
-    </div>
+  <script type="module">
+    // Initialize Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBP__TQ3__mgwobKSabML3mXo-5uNlXR5g",
+      authDomain: "aswin-collections.firebaseapp.com",
+      projectId: "aswin-collections",
+      storageBucket: "aswin-collections.firebasestorage.app",
+      messagingSenderId: "820050471076",
+      appId: "1:820050471076:web:9469687edf705514a59e31"
+    };
+    const app = initializeApp(firebaseConfig);
+  </script>
 </body>
 </html>
